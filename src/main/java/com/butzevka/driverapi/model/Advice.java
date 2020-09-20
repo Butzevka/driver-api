@@ -3,19 +3,28 @@ package com.butzevka.driverapi.model;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import java.util.List;
 
 @Entity
-@NoArgsConstructor
 @Data
+@NoArgsConstructor
 public class Advice {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @NotEmpty
+    private String adviceTitle;
+    private String multimediaSrc;
+    private String adviceText;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Tag> tags;
+    private boolean adviceOfTheWeek;
+    private Long likes;
+    private Long shares;
+    @OneToOne
+    private Training training;
 
 
 }
-git 
