@@ -4,7 +4,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.NotEmpty;
+import java.util.Set;
 
 @Entity
 @Data
@@ -13,8 +14,9 @@ public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @NotEmpty
     private String questionBody;
     @OneToMany
-    private List<Answer> answers;
+//    @Size(min = 3, max = 3)
+    private Set<Answer> answers;
 }

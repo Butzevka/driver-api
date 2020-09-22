@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -17,5 +17,5 @@ public class Training {
     @NotEmpty
     private String trainingTitle;
     @OneToMany
-    private List<Question> trainingQuestions;
+    private Set<Question> trainingQuestions;
 }
