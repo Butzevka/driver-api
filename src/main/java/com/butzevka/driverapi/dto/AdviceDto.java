@@ -1,6 +1,5 @@
 package com.butzevka.driverapi.dto;
 
-import com.butzevka.driverapi.model.Question;
 import com.butzevka.driverapi.model.Tag;
 import lombok.Data;
 
@@ -16,8 +15,7 @@ public class AdviceDto {
     private Set<Tag> tags;
     private Long likes;
     private Long shares;
-    private String trainingTitle;
-    private Set<Question> trainingQuestions;
+    private TrainingDto training;
 
 
 

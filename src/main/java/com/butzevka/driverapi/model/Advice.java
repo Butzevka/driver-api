@@ -25,5 +25,4 @@ public class Advice {
     @OneToOne
     private Training training;
 
-
 }

@@ -1,13 +1,11 @@
-package com.butzevka.driverapi.service;
+package com.butzevka.driverapi.converter;
 
 import com.butzevka.driverapi.dto.AdviceDto;
 import com.butzevka.driverapi.model.Advice;
-import com.butzevka.driverapi.model.Training;
-import lombok.AllArgsConstructor;
+import com.butzevka.driverapi.service.AdviceService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
-import org.modelmapper.spi.MatchingStrategy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,16 +14,23 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class MapService {
+public class AdviceConverter {
 
     private final AdviceService adviceService;
     private final ModelMapper modelMapper;
 
-    private AdviceDto convertToAdviceDto(Advice advice) {
+    public AdviceDto convertToAdviceDto(Advice advice) {
         modelMapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.LOOSE);
         AdviceDto adviceDto = modelMapper.map(advice, AdviceDto.class);
         return adviceDto;
+    }
+
+    public Advice convertToAdviceEntity(AdviceDto adviceDto) {
+        modelMapper.getConfiguration()
+                .setMatchingStrategy(MatchingStrategies.LOOSE);
+        Advice advice = modelMapper.map(adviceDto, Advice.class);
+        return advice;
     }
 
     public List<AdviceDto> findAllAdviceArticles() {
@@ -39,6 +44,7 @@ public class MapService {
         Optional<Advice> adviceModel = adviceService.findById(id);
         return adviceModel.map(this::convertToAdviceDto);
     }
+
 
 
 }
