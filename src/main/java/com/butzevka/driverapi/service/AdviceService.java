@@ -19,5 +19,5 @@ public class AdviceService {
     public Advice addAdvice(Advice advice) {return adviceRepository.save(advice);}
     public Advice editAdvice(Advice advice) {return adviceRepository.save(advice);}
     public void deleteAdvice(Advice advice) {adviceRepository.delete(advice);}
-      void deleteAdviceById(Long id) {adviceRepository.deleteById(id);}
+    public void deleteAdviceById(Long id) {adviceRepository.deleteById(id);}
 }

@@ -33,18 +33,4 @@ public class AdviceConverter {
         return advice;
     }
 
-    public List<AdviceDto> findAllAdviceArticles() {
-        return (adviceService.findAllAdvices())
-                .stream()
-                .map(this::convertToAdviceDto)
-                .collect(Collectors.toList());
-    }
-
-    public Optional<AdviceDto> findAdviceArticleById(Long id) {
-        Optional<Advice> adviceModel = adviceService.findById(id);
-        return adviceModel.map(this::convertToAdviceDto);
-    }
-
-
-
 }
