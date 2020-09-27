@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
+@RequestMapping("/advice")
 public class AdviceController {
 
     private final AdviceService adviceService;
@@ -40,14 +41,14 @@ public class AdviceController {
         return advice;
     }
 
-    @GetMapping("/advice/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<AdviceDto> viewAdvice(@PathVariable Long id) {
         Optional<AdviceDto> advice = adviceService.findById(id).map(this::convertToAdviceDto);
         return advice.map(a -> new ResponseEntity<>(a, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/advice/list")
+    @GetMapping("/list")
     public ResponseEntity<List<AdviceDto>> viewAllAdvices() {
         List<AdviceDto> advices = (adviceService.findAllAdvices())
                 .stream()
@@ -56,14 +57,14 @@ public class AdviceController {
         return new ResponseEntity<>(advices, HttpStatus.OK);
     }
 
-    @PostMapping("advice/list")
+    @PostMapping("/list")
     public ResponseEntity<AdviceDto> addNewAdvice(@Valid @RequestBody AdviceDto newAdvice) {
         Advice adviceEntity = convertToAdviceEntity(newAdvice);
         adviceService.addAdvice(adviceEntity);
         return new ResponseEntity<>(newAdvice, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("advice/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteAdvice(@PathVariable Long id) {
         try {
             adviceService.deleteAdviceById(id);
@@ -73,22 +74,22 @@ public class AdviceController {
         }
     }
 
-    @PutMapping("/advice/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<AdviceDto> updateAdvice(@PathVariable Long id, @Valid @RequestBody AdviceDto adviceEdit) {
         Optional<Advice> advice = adviceService.findById(id);
-        if (!advice.isPresent()) {
-            log.error("Porada o id:" +id+ " nie istnieje!");
+        if (advice.isEmpty()) {
+            log.error("Porada o id:" + id + " nie istnieje!");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } else {
             Advice _advice = advice.get();
-            _advice.setAdviceTitle(adviceEdit.getAdviceTitle());
-            _advice.setAdviceText(adviceEdit.getAdviceText());
-            return new ResponseEntity<>(convertToAdviceDto(adviceService.editAdvice(_advice)), HttpStatus.OK);
-
+            adviceService.editAdvice(_advice);
+            return new ResponseEntity<>(adviceEdit, HttpStatus.OK);
         }
-
     }
 
+    @GetMapping("/{tagName}")
+    public ResponseEntity<List<Advice>> findAdviceListByTag(@PathVariable String tagName) {
+        return new ResponseEntity<>(adviceService.findAdvicesByTag(tagName), HttpStatus.OK);
 
-
+    }
 }

@@ -6,6 +6,7 @@ import com.butzevka.driverapi.model.Advice;
 import com.butzevka.driverapi.model.Training;
 import com.butzevka.driverapi.service.TrainingService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class TrainingController {
@@ -68,6 +70,19 @@ private final ModelMapper modelMapper;
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PutMapping("/training/{id}")
+    public ResponseEntity<TrainingDto> updateTraining(@PathVariable Long id, @Valid @RequestBody TrainingDto trainingDto) {
+        Optional<Training> training = trainingService.findById(id);
+        if (training.isEmpty()) {
+            log.error("Trening o id:" + id + " nie istnieje!");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            Training _training = training.get();
+            trainingService.addTraining(_training);
+            return new ResponseEntity<>(trainingDto, HttpStatus.OK);
         }
     }
 }

@@ -12,7 +12,7 @@ public class AdviceDto {
     private String adviceTitle;
     private String multimediaSrc;
     private String adviceText;
-    private Set<Tag> tags;
+    private Set<TagDto> tags;
     private Long likes;
     private Long shares;
     private TrainingDto training;
