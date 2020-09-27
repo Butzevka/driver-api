@@ -3,6 +3,7 @@ package com.butzevka.driverapi.service;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,6 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+@Service
 public class FilesStorageServiceImpl implements FilesStorageService {
 
     private final Path root = Paths.get("uploads");
@@ -27,7 +29,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
     @Override
-    public void save(MultipartFile file) {
+    public void store(MultipartFile file) {
         try {
             Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
         } catch (Exception e) {

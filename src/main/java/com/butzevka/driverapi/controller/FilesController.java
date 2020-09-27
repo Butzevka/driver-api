@@ -3,10 +3,7 @@ package com.butzevka.driverapi.controller;
 import com.butzevka.driverapi.dto.FileDto;
 import com.butzevka.driverapi.dto.ResponseMessageDto;
 import com.butzevka.driverapi.service.FilesStorageService;
-import com.butzevka.driverapi.service.FilesStorageServiceImpl;
-import io.swagger.models.Response;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.jni.File;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,7 +31,7 @@ public class FilesController {
         try {
             List<String> fileNames = new ArrayList<>();
             Arrays.asList(files).stream().forEach(file -> {
-                filesStorageService.save(file);
+                filesStorageService.store(file);
                 fileNames.add(file.getOriginalFilename());
             });
             message = "Pliki załadowano pomyślnie: " + fileNames;
