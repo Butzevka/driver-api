@@ -2,8 +2,12 @@ package com.butzevka.driverapi.controller;
 
 import com.butzevka.driverapi.dto.FileDto;
 import com.butzevka.driverapi.dto.ResponseMessageDto;
+import com.butzevka.driverapi.model.DBFile;
+import com.butzevka.driverapi.service.DBFileStorageService;
 import com.butzevka.driverapi.service.FilesStorageService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.aspectj.bridge.IMessage;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,20 +16,37 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/files")
 public class FilesController {
 
     private final FilesStorageService filesStorageService;
+    private final DBFileStorageService dbFileStorageService;
+
 
     @PostMapping("/upload")
+    public ResponseEntity<ResponseMessageDto> uploadFile(@RequestParam("file") MultipartFile file) {
+        String message = "";
+        DBFile dbFile = dbFileStorageService.storeFile(file);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/uploads/")
+                .path(String.valueOf(dbFile.getId()))
+                .toUriString();
+        message = "Pliki załadowano pomyślnie" + file.getSize();
+        return new ResponseEntity<>(new ResponseMessageDto(message), HttpStatus.OK);
+    }
+
+    @PostMapping("/uploadMany")
     public ResponseEntity<ResponseMessageDto> uploadFiles(@RequestParam("files")MultipartFile[] files) {
         String message = "";
         try {
